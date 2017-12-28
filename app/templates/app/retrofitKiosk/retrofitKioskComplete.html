@@ -1,0 +1,34 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<a class="btn btn-primary" href="{% url 'retrofitKiosk' %}">New Retrofit Kiosk</a>
+
+<hr />
+
+<h5 style="font-weight:bold">Change Request Details:</h5>
+<div style="margin-left:20px">
+    {% if retroNumber %}
+        <p>Retrofit Job Number:  {{ retroNumber }}</p>
+    {% endif %}
+
+    {% if equipRemove %}
+        <p>Peripheral Removed:  {{ equipRemove }}</p>
+    {% endif %}
+
+    {% if equipAdd %}
+        <p>Peripheral Added:  {{ equipAdd }}</p>
+        {% if currentAttr %}
+            <p>Peripheral Attribute:  {{ currentAttr }}</p>
+        {% endif %}
+    {% endif %}
+</div>
+
+<h5 style="font-weight:bold">Changes were made to the following kiosks:</h5>
+<p>{% render_table kioskTable %}</p>
+
+{% endblock %}

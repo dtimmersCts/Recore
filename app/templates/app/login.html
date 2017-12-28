@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Recore</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+    <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
+    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
+    <script src="{% static 'app/scripts/respond.js' %}"></script>
+    <script src="{% static 'app/scripts/recorescripts.js' %}"></script>
+    <script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="navbar navbar-fixed-top">
+            <img class="navbar-center-logo" src="{% static 'app/images/recore_logo.jpg' %}" />
+            <img class="navbar-brand" src="{% static 'app/images/cts_logo.jpg' %}" />
+        </div>
+    </div>
+
+    <div class="container-fluid body-content" id="mainBody">
+        <h2>{{ title }}</h2>
+        <h4>{{ message }}</h4>
+
+        <a href="{% url "social:begin" "google-oauth2" %}"><img src="{% static 'app/images/google_login.png' %}"/></a>  
+        
+        <hr/>
+        <footer>
+            <p>&copy; {{ year }} - Connected Technology Solutions</p>
+        </footer>
+    </div>
+
+</body>
+</html>

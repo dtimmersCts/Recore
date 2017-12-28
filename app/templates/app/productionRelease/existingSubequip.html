@@ -1,0 +1,18 @@
+﻿{% load staticfiles %}
+{% load render_table from django_tables2 %}
+
+<div id='{{ equipID }}' style="padding-left:40px">
+    {% if subTable %}
+        <h5>Subequipment:</h5>
+        {% render_table subTable %}
+    {% endif %}
+
+    {% if subequipText %}
+        {% for subequip in subequipText %}
+            <div class="form-group">
+                <label for="{{ subequip.id }}G">{{ subequip.subequip.name }}</label>
+                <input type="text" id="{{ subequip.id }}G" name="{{ subequip.id }}G" class="form-control" value={{ subequip.display_text }} readonly />
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>

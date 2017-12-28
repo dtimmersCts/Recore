@@ -1,0 +1,63 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<input type="button" name="Edit Release Information" value="Edit Release Information" class="btn btn-primary" onclick="editProdRlseInfo_jscript('{{ currentProdRlse.job_number }}');" />
+<input type="button" name="Edit Release Equipment" value="Edit Release Equipment" class="btn btn-primary" onclick="editProdRlseEquip_jscript('{{ currentProdRlse.job_number }}');" />
+<a class="btn btn-primary" href="{% url 'productionRelease' %}">New Search</a>
+
+<h5 style="font-weight:bold">Download Production Release Revisions</h5>
+<div style="padding-left:20px">
+    {% for rlse in allProdRlse %}
+        <p><a href="{% url 'generatePDF' %}?jobNumber={{ rlse.job_number }}&prodRlseRev={{ rlse.prod_rlse_rev }}">Production Release Job Number {{ rlse.job_number }} Rev {{ rlse.prod_rlse_rev }}</a></p>
+    {% endfor %}
+</div>
+
+<h5 style="font-weight:bold">General Information</h5>
+<table class="table" style="width:75%; table-layout:fixed">
+    <tr><td>Client: {{ currentProdRlse.client }}</td><td>Quantity: {{ currentProdRlse.kiosk_quantity }}</td><td>Kiosk Model: {{ currentKiosk.kiosk_type }}</td></tr>
+    <tr><td>Job Number: {{ currentProdRlse.job_number }}</td><td>Unit ID(s): {{ currentProdRlse.kiosk_range }}</td><td>Production Release Revision: {{ currentProdRlse.prod_rlse_rev }}</td></tr>
+</table>
+
+<div id="editProdRlseInfo_JS">
+    <table class="table" style="width:75%; table-layout:fixed">
+        <tr><td>Sales Rep:  {{ currentProdRlse.sales_rep }}</td><td>P.O. Number: {{ currentProdRlse.po_number }}</td><td>Invoice Number: {{ currentProdRlse.invoice_number }}</td></tr>
+        <tr><td>Release Date: {{ currentProdRlse.release_date }}</td><td>Ship Date: {{ currentProdRlse.ship_date }}</td><td>Go-Live Date: {{ currentProdRlse.go_live_date }}</td></tr>
+    </table>
+    <table class="table" style="width:75%; table-layout:fixed">
+        <tr><td>Image Support Fee: {{ currentProdRlse.image_support_fee }}</td><td></td><td></td></tr>
+        <tr><td>IT Contact Name: {{ currentProdRlse.it_contact }}</td><td>IT Phone Number: {{ currentProdRlse.it_phone }}</td><td>IT Email: {{ currentProdRlse.it_email }}</td></tr>
+    </table>
+</div>
+
+<hr />
+
+<h5 style="font-weight:bold">Kiosk Information</h5>
+<div class="container-fluid" style="background-color:#eeeeee; padding:10px">
+    <div id="editProdRlseEquip_JS">
+    {% for prod in prodList %}
+        <h5 style="font-weight:bold">{{ prod.name }}</h5>
+            {% for comp in compList %}
+            {% if comp.prod_rlse_group == prod %}
+                <div style="padding-left:20px">
+                <h5 style="font-weight:bold">{{ comp.name }}</h5>
+                    {% for equip in currentEquip %}
+                    {% if equip.equip.kiosk_component == comp %}
+                        <p style="padding-left:20px">{{ equip.equip.make_model }}</p>
+                        <script type="text/javascript">existingSubequip_jscript('#{{ equip.id }}')</script>
+                        <div id='{{ equip.id }}'></div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endfor %}
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

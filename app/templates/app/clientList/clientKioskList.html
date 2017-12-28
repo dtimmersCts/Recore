@@ -1,0 +1,32 @@
+﻿﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<form action="/newClient_addContact" method="post">
+        {% csrf_token %}
+        <input type="hidden" value="{{ title }}" name="clientName" />
+        <input type="submit" value="Edit Contacts" class="btn btn-primary"/>
+        <a class="btn btn-primary" href="{% url 'newKiosk' %}">Add Kiosks</a>
+        <a class="btn btn-primary" href="{% url 'clientList' %}">Back to Client List</a>
+</form>
+
+<h4 style="font-weight:bold">Search Results:</h4>
+    <p style="font-weight:bold">Client Contacts:</p>
+    {% if contactTable %}
+        <p>{% render_table contactTable %}</p>
+    {% else %}
+        <p style="color:red">{{ noContactsMessage }}</p>
+    {% endif %}
+
+    <p style="font-weight:bold">Kiosk List:</p>
+    {% if clientTable %}
+            <p>{% render_table clientTable %}</p>
+    {% else %}
+        <p style="color:red">{{ noResultsMessage }}</p>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,33 @@
+﻿{% load staticfiles %}
+{% load render_table from django_tables2 %}
+
+<div id='{{ subEquipDiv }}' style="padding-left:40px">
+    {% if reqSubTable %}
+        <h5 style="font-weight:bold">Required Equipment</h5>
+        {% render_table reqSubTable %}
+    {% endif %}
+
+    {% if subequipGroups %}
+        {% for group in subequipGroups %}
+        <h5 style="font-weight:bold">Select Component</h5>
+        <select name="{{ group.id }}B" required class="form-control">
+            <option selected disabled hidden value="">Choose one</option>
+            {% for subequip in subequipChoices %}
+                {% if subequip.subequip_group == group %}
+                    <option value={{ subequip.id }}>{{ subequip.name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        {% endfor %}
+    {% endif %}
+
+    {% if textSubequip %}
+        <h5 style="font-weight:bold">Required Text Input</h5>
+        {% for text in textSubequip %}
+            <div class="form-group">
+                <label for="{{ text.id }}C">{{ text.name }}<span class="asteriskField">*</span></label>
+                <input type="text" id="{{ text.id }}C" name="{{ text.id }}C" maxlength="50" class="form-control" placeholder="Required Text Here" required />
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>

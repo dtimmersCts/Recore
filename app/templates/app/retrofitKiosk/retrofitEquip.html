@@ -1,0 +1,57 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+{% if noResultsMessage %}
+    <h5 style="color:red">{{ noResultsMessage }}</h5>
+{% endif %}
+
+{% if changeMessage %}
+    <h5 style="font-weight:bold">{{ changeMessage }}</h5>
+
+    <form action="/retrofitKioskComplete" method="get">
+        <div class="row">  
+            {% if removeEquip %}
+                <div class="col-sm-2"><p style="text-indent:20px">Remove Peripheral:</div>
+                <div class="col-sm-2">
+                    <select name=removeType class="form-control">
+                        <option selected disabled>Choose one</option>
+                        {% for equip in removeEquip %}
+                        <option value={{ equip.id }}>{{ equip.make_model }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            {% if addEquip %}
+                {% if removeEquip %}
+                    <br />
+                {% endif %}
+                <div class="col-sm-2"><p style="text-indent:20px">Add Peripheral:</div>
+                <div class="col-sm-2">
+                    <select name=addType class="form-control" onchange="getSubEquip_jscript(this.value, '#retrofitSubequip_JS')">
+                        <option selected disabled>Choose one</option>
+                        {% for equip in addEquip %}
+                        <option value={{ equip.id }}>{{ equip.make_model }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+        </div>
+
+        <div id="retrofitSubequip_JS"></div>
+
+        <br />
+        <input type="hidden" name="retroNumber" value={{ retroNumber }} />
+        <input type="hidden" name="startKiosk" value={{ startKiosk }} />
+        <input type="hidden" name="endKiosk" value={{ endKiosk }} />
+        <input type="submit" value="Submit Change" class="btn btn-primary" />
+    </form>
+{% endif %}
+
+{% endblock %}

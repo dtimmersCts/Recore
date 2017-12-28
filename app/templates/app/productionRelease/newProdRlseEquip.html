@@ -1,0 +1,29 @@
+﻿{% load staticfiles %}
+{% load render_table from django_tables2 %}
+
+<div id='{{ currentCompObject.id }}'>
+    {% if currentCompObject.display_type == "dropdown" %}
+        <div class="form-group">
+        <select name="{{ currentCompObject.id }}" required class="form-control" onchange="addEquipList(this.value, '#{{ currentCompObject.id }}', '#{{ nextComp }}', '{{ kioskType }}')">
+            <option selected disabled hidden value="">Choose one</option>
+            <option value="None">None</option>
+            {% for equip in equipOptions %}
+                <option value={{ equip.id }}>{{ equip.make_model }}</option>
+            {% endfor %}
+        </select>
+        <div id='{{ currentCompObject.id }}A'></div>
+        </div>
+        {% elif currentCompObject.display_type == "checkbox" %}
+            <script type="text/javascript">getNextComp('#{{ nextComp }}', '{{ kioskType }}')</script>
+            <div class="form-group">
+                {% for equip in equipOptions %}
+                    <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="{{ currentCompObject.id }}[]" value={{ equip.id }} onchange="addEquipListCheckbox(this, '#{{ currentCompObject.id }}', '#{{ nextComp }}', '#{{ equip.id }}', '{{ kioskType }}')"/>{{ equip.make_model }}
+                    </label>
+                    </div>
+                    <div id='{{ equip.id }}D'></div>
+                {% endfor %}
+            </div>
+    {% endif %}
+</div>

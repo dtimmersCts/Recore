@@ -1,0 +1,57 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+{% if equipList %}
+<div class="container-fluid" style="background-color:#eeeeee; padding:10px">
+    <h4>{{ resultsMessage }}</h4>
+
+    <form action="/newKioskEquip" method="post">
+        {% csrf_token %}
+        {% for prod in prodList %}
+            <h5 style="font-weight:bold">{{ prod.name }}</h5>
+            {% for comp in compList %}
+                {% if comp.prod_rlse_group == prod %}
+                    <div style="padding-left:20px">
+                    <h5 style="font-weight:bold">{{ comp.name }}</h5>
+                    {% for equip in equipList %}
+                        {% if equip.kiosk_component == comp %}
+                        <div style="padding-left:40px" class="checkbox">
+                        <label>
+                            <input id='{{ equip.id }}' type="checkbox" name=equip[] value={{ equip.id }} onchange="mtNewKioskCheckbox(this, '#{{ equip.id }}A')"/>{{ equip.make_model }}
+                        </label>
+                        </div>
+                        <div id='{{ equip.id }}A'></div>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}     
+
+        <input type="hidden" name="jobNumber" value={{ jobNumber }} />
+        <input type="submit" class="btn btn-primary" />
+    </form>
+</div>
+<hr />
+{% endif %}
+
+<form action="/newKiosk" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    {% if not equipList %}
+        <input type="submit" class="btn btn-primary" />
+    {% endif %}
+</form>
+
+{% if kioskTable %}
+    <p style="color:red">{{ resultsMessage }}</p>
+    <p>{% render_table kioskTable %}</p>
+{% endif %}
+
+{% endblock %}

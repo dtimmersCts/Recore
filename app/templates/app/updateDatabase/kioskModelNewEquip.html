@@ -1,0 +1,33 @@
+﻿{% load staticfiles %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+<div id='{{ equipDiv }}' style="padding-left:120px">
+    <h4 style="font-weight:bold">New Equipment Form</h4>
+    <form onsubmit="return false" method="get">
+        <div class="form-group">
+            <label for="make_id">Make<span class="asteriskField">*</span></label>
+            <input type="text" id="make_id" name="make" autofocus="autofocus" maxlength="30" class="form-control" placeholder="Elo" required />
+        </div>
+        <div class="form-group">
+            <label for="model_id">Model<span class="asteriskField">*</span></label>
+            <input type="text" id="model_id" name="model" maxlength="30" class="form-control" placeholder="1939L" required />
+        </div>
+        <div class="form-group">
+            <label for="ctsNumber_id">CTS Part Number</label>
+            <input type="text" id="ctsNumber_id" name="ctsNumber" maxlength="50" class="form-control" placeholder="328846" />
+        </div>
+        <div class="form-group">
+            <label for="manfNumber_id">Manufacturer Part Number</label>
+            <input type="text" id="manfNumber_id" name="manfNumber" maxlength="50" class="form-control" placeholder="947561" />
+        </div>
+        <div class="form-group">
+            <label for="equip_descript_id">Description<span class="asteriskField">*</span></label>
+            <textarea rows="5" id="equip_descript_id" name="equip_descript" maxlength="300" class="form-control" placeholder="Equipment Details" />
+        </div>
+        <p>
+            <input type="submit" value="Create" class="btn btn-primary" onclick="getEquipValues('{{ currentProd.id }}', '{{ currentComp.id }}');" />
+            <input type="button" name="Cancel" value="Cancel" class="btn btn-primary" onclick="cancelDatabaseForm_jscript();" />
+        </p>
+    </form>
+</div>

@@ -1,0 +1,18 @@
+﻿{% load staticfiles %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+<div id="getDatabaseForm_JS">
+    <hr />
+        <div class="container-fluid" style="background-color:#eeeeee; padding:10px">
+            <h4 style="font-weight:bold">{{ formName }}</h4>
+            <form action="/updateDatabase" method="post">
+                {% csrf_token %}
+                {{ databaseForm|crispy }}
+                <p><input type="submit" value="Create" class="btn btn-primary" /></p>
+            </form>
+        </div>
+    <hr />
+    <h4 style="font-weight:bold">Existing Database Information:  {{ formName }}</h4>
+    {% render_table tableData %}
+</div>

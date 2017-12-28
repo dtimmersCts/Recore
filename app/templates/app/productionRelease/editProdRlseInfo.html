@@ -1,0 +1,15 @@
+﻿{% load staticfiles %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+<div id='editProdRlseInfo_JS'>
+    <hr />
+
+    <form action="/existProdRlse" method="post">
+        {% csrf_token %}
+        {{ prodRlseForm|crispy }}
+        <input type="hidden" name="jobNumber" value={{ jobNumber }} />
+        <input type="submit" class="btn btn-primary" />
+        <a class="btn btn-primary" href="{% url 'existProdRlse' %}?jobNumber={{ jobNumber }}">Cancel</a>
+    </form>
+</div>

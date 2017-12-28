@@ -1,0 +1,15 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<p><ul>
+    {% for client in clients %}
+        <li><a href="{% url 'clientList' %}/{{ client.id }}?clientName={{ client.name }}">{{ client.name }}</a></li>
+    {% endfor %}
+    </ul>
+</p>
+
+{% endblock %}

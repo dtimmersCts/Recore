@@ -1,0 +1,32 @@
+﻿{% load staticfiles %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+<div id="newEquipRelations_JS">
+    {% if currentKioskType %}
+        <hr style="border-color:white" />
+        <div id="createKioskRelations_JS">
+        <h4 style="font-weight:bold">New relations for this Kiosk Model</h4>
+        {% for prod in prodList %}
+            <h6 style="font-weight:bold; padding-left:20px">Production Release Group</h6>
+                <p style="padding-left:40px">{{ prod.name }}</p>
+                    <h6 style="font-weight:bold; padding-left:60px">Kiosk Components in this Production Release Group</h6>
+                        {% for comp in compList %}
+                        {% if comp.prod_rlse_group == prod %}
+                        <p style="padding-left:80px">{{ comp.name }}</p>
+                            <h6 style="font-weight:bold; padding-left:100px">Equipment in this Component Group</h6>
+                                {% for equip in equipList %}
+                                {% if equip.kiosk_component == comp %}
+                                    <div style="padding-left:120px" class="form-group">
+                                        <p>{{ equip.make_model }}</p>
+                                    </div>
+                                {% endif %}
+                                {% endfor %}
+                        <hr style="border-color:white" />
+                        {% endif %}
+                        {% endfor %}
+        <hr style="border-color:white" />
+        {% endfor %}
+        </div>
+    {% endif %}
+</div>

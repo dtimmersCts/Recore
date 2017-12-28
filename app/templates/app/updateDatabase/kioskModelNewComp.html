@@ -1,0 +1,30 @@
+﻿{% load staticfiles %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+<div id='{{ compDiv }}' style="padding-left:80px">
+    <h4 style="font-weight:bold">New Kiosk Component Form</h4>
+    <form onsubmit="return false" method="get">
+        <div class="form-group">
+            <label for="name_id">Name<span class="asteriskField">*</span></label>
+            <input type="text" id="name_id" name="name" autofocus="autofocus" maxlength="80" class="form-control" placeholder="Touchscreen" required />
+        </div>
+        <div class="form-group">
+            <label for="id_display_type_0" class="control-label" requiredField>Display Field Type<span class="asteriskField">*</span></label>
+            <div class="controls">
+                <div class="radio"><label><input type="radio" checked="checked" name="display_type" value="dropdown" />Dropdown Menu</label></div>
+                <div class="radio"><label><input type="radio" name="display_type" value="checkbox" />Checkbox Select</label></div>
+                <div class="radio"><label><input type="radio" name="display_type" value="radio" />Radio Button</label></div>
+                <div class="radio"><label><input type="radio" name="display_type" value="text" />Text Field</label></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="comp_descript_id">Description<span class="asteriskField">*</span></label>
+            <textarea rows="5" id="comp_descript_id" name="comp_descript" maxlength="300" class="form-control" placeholder="Component Details" />
+        </div>
+        <p>
+            <input type="submit" value="Create" class="btn btn-primary" onclick="getCompValues('{{ currentProd.id }}');" />
+            <input type="button" name="Cancel" value="Cancel" class="btn btn-primary" onclick="cancelDatabaseForm_jscript();" />
+        </p>
+    </form>
+</div>

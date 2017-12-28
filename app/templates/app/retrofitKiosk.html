@@ -1,0 +1,15 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<form action="/retrofitEquip" method="get">
+    {{ searchForm|crispy }}
+    {{ changeForm|crispy }}
+    <input type="submit" class="btn btn-primary" />
+</form>
+
+{% endblock %}

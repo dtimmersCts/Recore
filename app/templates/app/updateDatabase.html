@@ -1,0 +1,86 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<p>Actions executed in the Update Database Section feed the database with information necessary to perform all other actions, consider the following:</p>
+
+<ul>
+    <li>To ensure data integrity, actions submitted to the database from this page cannot be removed except by the Database Administrator</li>
+    <li>Always use appropriate and exact equipment information</li>
+    <li>Appropriate nomenclature and grammar will make the database easier to read and understand</li>
+    <li>If you do not understand any part of the form presented, ask your supervisor or one of your peers for guidance</li>
+</ul>
+
+<input type="button" name="Equipment" value="Equipment" class="btn btn-primary" onclick="getDatabaseForm_jscript(this.value);" />
+<input type="button" name="Subequipment" value="Subequipment" class="btn btn-primary" onclick="getDatabaseForm_jscript(this.value);" />
+<input type="button" name="Subequipment Group" value="Subequipment Group" class="btn btn-primary" onclick="getDatabaseForm_jscript(this.value);" />
+<input type="button" name="Kiosk Component" value="Kiosk Component" class="btn btn-primary" onclick="getDatabaseForm_jscript(this.value);" />
+<input type="button" name="Production Release Group" value="Production Release Group" class="btn btn-primary" onclick="getDatabaseForm_jscript(this.value);" />
+<input type="button" name="Kiosk Model" value="Kiosk Model" class="btn btn-primary" onclick="getDatabaseForm_jscript(this.value);" />
+<input type="button" name="Equipment Restriction" value="Equipment Restriction" class="btn btn-primary" onclick="getDatabaseForm_jscript(this.value);" />
+
+<div id="getDatabaseForm_JS">
+{% if currentForm %}
+    <hr />
+    <div class="container-fluid" style="background-color:#eeeeee; padding:10px">
+        <h4 style="font-weight:bold; color:green;">Successfully added the following information:</h4>
+        {{ currentForm|crispy }}
+
+        <div id="newEquipRelations_JS">
+            {% if currentKioskType %}
+                <hr style="border-color:white" />
+                <div id="createKioskRelations_JS">
+                <h4 style="font-weight:bold">Create relations for this Kiosk Model</h4>
+                {% for prod in prodList %}
+                    <h6 style="font-weight:bold; padding-left:20px">Production Release Group</h6>
+                        <p style="padding-left:40px">{{ prod.name }}</p>
+                            <h6 style="font-weight:bold; padding-left:60px">Kiosk Components in this Production Release Group</h6>
+                                {% for comp in compList %}
+                                {% if comp.prod_rlse_group == prod %}
+                                <p style="padding-left:80px">{{ comp.name }}</p>
+                                    <h6 style="font-weight:bold; padding-left:100px">Equipment in this Component Group</h6>
+                                        {% for equip in equipList %}
+                                        {% if equip.kiosk_component == comp %}
+                                            <div style="padding-left:120px" class="form-group">
+                                                <label><input type="checkbox" class="checkbox-inline" name=equipRelationList[] value={{ equip.id }} />{{ equip.make_model }}</label>
+                                            </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <div style="padding-left:120px"><input type="button" name="newEquip" value="Add Equipment" class="btn btn-primary" onclick="addNewEquip_jscript('{{ prod.id }}', '{{ comp.id }}', '#{{ comp.id }}C')" /></div>
+                                        <div id='{{ comp.id }}C'></div>
+                                <hr style="border-color:white" />
+                                {% endif %}
+                                {% endfor %}
+                                <div style="padding-left:80px"><input type="button" name="newComp" value="Add Kiosk Component" class="btn btn-primary" onclick="addNewComp_jscript('{{ prod.id }}', '#{{ prod.id }}P')" /></div>
+                                <div id='{{ prod.id }}P' style="padding-left:100px"></div>
+                <hr style="border-color:white" />
+                {% endfor %}
+                <div style="padding-left:40px"><input type="button" name="newProd" value="Add Production Release Group" class="btn btn-primary" onclick="addNewProd_jscript()" /></div>
+                <div id="addNewProd_JS"></div>
+                </div>
+                <hr style="border-color:white" />
+                <input type="button" name="create" value="Create" class="btn btn-primary" onclick="getNewRelations_jscript('{{ currentKioskType }}')" />
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
+{% if errorMessage %}
+    <hr />
+    <div style="color:red">
+    <h5 style="font-weight:bold">An error occured with your database submission, consider the following:</h5>
+        <ul>
+            <li>You failed to select at least one kiosk model or at least one piece of equipment from the list of checkboxes</li>
+            <li>The information you submitted already exists in the database, reference the table below each form</li>
+            <li>Select a new form from the buttons above and resubmit the information correctly</li>
+        </ul>
+    </div>
+{% endif %}
+</div>
+
+{% endblock %}

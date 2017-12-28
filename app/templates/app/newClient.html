@@ -1,0 +1,37 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<form action="/newClient" method="post">
+    {% csrf_token %}
+    <p>{{ clientForm|crispy }}</p>
+    <p><input type="submit" class="btn btn-primary" /></p>
+    {% if errorMessage %}
+        <p style="color:red">{{ errorMessage }}</p>
+    {% endif %}
+</form>
+
+{% if successMessage %}
+    <p style="color:green">{{ successMessage }}</p>
+
+    <div class="container-fluid" style="background-color:#eeeeee; padding:10px">
+        <h5><strong>Add a contact for this client</strong></h5>
+        <form action="/newClient_addContact" method="post">
+            {% csrf_token %}
+                <p>{{ contactForm|crispy }}</p>
+            <input type="hidden" value="{{ currentClient }}" name="clientName" />
+            <input type="submit" value="Add Contact" class="btn btn-primary" />
+        </form>
+    </div>
+
+    <h5><strong>Choose one of the following options to skip adding a contact</strong></h5>
+
+    <a class="btn btn-primary" href="{% url 'newKiosk' %}">Add Kiosks</a>
+    <a class="btn btn-primary" href="{% url 'newClient' %}">Add Another Client</a>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,53 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if successMessage %}
+    <h4 style="color:green; font-weight:bold; text-align:center">{{ successMessage }}</h4>
+{% endif %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<form action="/updateKiosk" method="get">
+        <p>{{ searchForm|crispy }}</p>
+        <input type="submit" class="btn btn-primary" />
+</form>
+
+{% if noResultsMessage %}
+    <p style="color:red">{{ noResultsMessage }}</p>   
+{% elif kioskInfo %}
+    <form action="/updateKiosk" method="post">
+        {% csrf_token %}
+        <p style="text-align:center; font-weight:bold">***Updating a value on this screen will create a new entry for that piece of equipment.  The former piece of equipment, along with the information for that equipment will be available in the kiosk history.***</p>
+        <h4 style="font-weight:bold">Kiosk Information:</h4>
+            <table class="table table-striped">
+                <tr><td>Client:</td><td>{{ kioskInfo.client }}</td></tr>
+                <tr><td>Kiosk Model:</td><td>{{ kioskInfo.kiosk_type }}</td></tr>
+                <tr><td>CTS Kiosk ID:</td><td>{{ kioskInfo.cts_kiosk_id }}</td></tr>
+                <tr><td>Job Number:</td><td>{{ kioskInfo.job_number }}</td></tr>
+                <tr><td>Notes:</td><td>{{ notesForm.notes }}</td></tr>
+            </table>
+        <hr />
+
+        <h4 style="font-weight:bold">Kiosk Equipment:</h4>
+        {% for equip in kioskEquip %}
+            <h5 style="margin-left:15px; font-weight:bold">{{ equip.equip.kiosk_component.name }}</h5>
+                <table style="width:50%; table-layout:fixed; margin-left:45px">
+                    <tr><td>{{ equip.equip }}<input type="hidden" value="{{ equip.id }}" name=equipName[] /></td></tr>
+                    <tr><td>Serial Number:</td><td><input type="text" class="form-control" value="{{ equip.serial_number }}" name=equipSerial[] required/></td></tr>
+                
+                    {% for attr in equipAttr %}
+                        {% if attr.kiosk_equip == equip %}
+                            <tr><td>{{ attr.equip_type_attr.description }}<input type="hidden" value="{{ attr.id }}" name=attrName[] /></td><td><input type="text" class="form-control" value="{{ attr.code_value }}" name=attrValue[] required/></td></tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+        {% endfor %}
+
+        <input type="submit" value="Update Kiosk" class="btn btn-primary" />
+    </form>
+{% endif %}
+
+{% endblock %}

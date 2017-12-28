@@ -1,0 +1,13 @@
+﻿{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+<div id="getSearchForm_JS">
+    <hr />
+    <div class="container-fluid" style="background-color:#eeeeee; padding:10px">
+        <h4 style="font-weight:bold">{{ searchType }}</h4>
+        <form action="/searchRecoreResults" method="get">
+            {{ searchForm|crispy }}
+            <p><input type="submit" value="Search" class="btn btn-primary" /></p>
+        </form>
+    </div>
+</div>

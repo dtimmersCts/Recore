@@ -1,0 +1,36 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4 style="color:red"><strong>{{ message }}</strong></h4>
+
+<p>Actions executed on this page are permanent, consider the following before proceeding:</p>
+
+<ul>
+    <li>Deleting a kiosk will remove all information associated with that kiosk</li>
+    <li>Deleting a job number will remove all kiosks associated with that job number (including all kiosk information)</li>
+    <li>Deleting a client will remove all contacts, job numbers, and kiosks associated with that client</li>
+</ul>
+
+<form action="/removeKiosk" method="get">
+    <input type="submit" value="Delete Kiosk" name="delete" class="btn btn-primary" />
+    <input type="submit" value="Delete Job Number" name="delete" class="btn btn-primary" />
+    <input type="submit" value="Delete Client" name="delete" class="btn btn-primary" />
+</form>
+
+{% if deleteType %}
+<hr />
+<form action="/removeKiosk_deleteKiosk" method="get">
+    <p>{{ deleteForm|crispy }}</p>
+    <p><input type="submit" value="Permanently Delete"class="btn btn-primary" /></p>
+</form>
+{% endif %}
+
+{% if userMessage %}
+    <hr />
+    <p>{{ userMessage }}</p>
+{% endif %}
+
+{% endblock %}

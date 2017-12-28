@@ -1,0 +1,62 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<input type="button" name="CTS Kiosk ID" value="CTS Kiosk ID" class="btn btn-primary" onclick="getSearchForm(this.value);" />
+<input type="button" name="Job Number" value="Job Number" class="btn btn-primary" onclick="getSearchForm(this.value);" />
+<input type="button" name="Peripheral" value="Peripheral" class="btn btn-primary" onclick="getSearchForm(this.value);" />
+
+<div id="getSearchForm_JS"></div>
+
+{% if searchTitle %}
+    <hr />
+    {% if kioskInfo %}
+        <a class="btn btn-primary" href="{% url 'updateKiosk' %}?ctsKioskID={{ kioskInfo.cts_kiosk_id }}">Edit this Kiosk</a>
+        <a class="btn btn-primary" href="{% url 'searchRecore' %}">New Search</a>
+    {% else %}
+        <a class="btn btn-primary" href="{% url 'searchRecore' %}">New Search</a>
+    {% endif %}
+        <h4 style="font-weight:bold">{{ searchTitle }}</h4>
+            {% if kioskInfo %}
+                <h5 style="font-weight:bold">Kiosk Information:</h5>
+                    <table class="table table-striped">
+                        <tr><td>Client:</td><td>{{ kioskInfo.client }}</td></tr>
+                        <tr><td>Kiosk Model:</td><td>{{ kioskInfo.kiosk_type }}</td></tr>
+                        <tr><td>CTS Kiosk ID:</td><td>{{ kioskInfo.cts_kiosk_id }}</td></tr>
+                        <tr><td>Job Number:</td><td>{{ kioskInfo.job_number }}</td></tr>
+                        <tr><td>Kiosk Notes:</td><td>{{ kioskInfo.notes }}</td></tr>
+                        <tr><td>Client Notes:</td><td>{{ clientInfo.notes }}</td></tr>
+                    </table>
+                <h5 style="font-weight:bold">Kiosk Equipment:</h5>
+                    {% render_table equipInfo %}
+                <h5 style="font-weight:bold">Client Contact Information:</h5>
+                    {% if contactInfo %}
+                        {% render_table contactInfo %}
+                    {% else %}
+                        <p style="color:red">{{ noResultsMessage }}</p>
+                    {% endif %}
+
+            {% elif kiosksTable %}
+                {% render_table kiosksTable %}
+            {% else %}
+                <p style="color:red">{{ noResultsMessage }}</p>
+            {% endif %}
+{% endif %}
+
+{% if errorMessage %}
+    <hr />
+    <div style="color:red">
+    <h5 style="font-weight:bold">Your search returned zero results, consider the following:</h5>
+        <ul>
+            <li>There are no items in the database that meet your search criteria</li>
+            <li>Your search was incorrectly formatted or included invalid characters (i.e. CTS Kiosk ID: MC--001 or Job Number 19-33)</li>
+            <li>Your search CAN include special characters</li>
+        </ul>
+    </div>
+{% endif %}
+
+{% endblock %}

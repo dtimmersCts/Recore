@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Recore</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+    
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+    <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
+    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
+    <script src="{% static 'app/scripts/respond.js' %}"></script>
+    <script src="{% static 'app/scripts/recorescripts.js' %}"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="navbar navbar-fixed-top">
+            <a id="menu" onclick="callNavMenu()" class="glyphicon glyphicon-align-justify btn-menu toggle"></a>
+            <img class="navbar-center-logo" src="{% static 'app/images/recore_logo.jpg' %}" />
+            <img class="navbar-brand" src="{% static 'app/images/cts_logo.jpg' %}" />
+        </div>
+    </div>
+
+    <div class="sidenav" id="mySidenav">
+        <a href="https://myaccount.google.com/">{{ user.first_name }} {{ user.last_name }}</a>
+        <a href="{% url 'logout' %}">Logout</a>
+        <hr />
+        <a href="{% url 'home' %}">Recore Home Page</a>
+        <a href="{% url 'searchRecore' %}">Search Recore</a>
+        <a href="{% url 'clientList' %}">Client List</a>
+        <a href="{% url 'updateKiosk' %}">Update Kiosk</a>
+        <a href="{% url 'productionRelease' %}">CTS Production Release</a>
+        <a href="{% url 'newKiosk' %}">MT New Kiosk</a>
+        <a href="{% url 'newClient' %}">New Client</a>
+        <a href="{% url 'retrofitKiosk' %}">Retrofit Kiosk</a>
+        <!-- Removed menu option for the removeKiosk function -->
+        <!-- Add the following code into the braces, including the percent signs, replacing 'insert code here':  % url 'removeKiosk' %  -->
+        <!-- <a href="{ insert code here }">Remove Kiosk</a> -->
+        <a href="{% url 'updateDatabase' %}">Update Database</a>
+    </div>
+
+    <div class="container-fluid body-content" id="mainBody">
+
+        {% block content %}{% endblock %}
+            <hr/>
+            <footer>
+                <p>&copy; {{ year }} - Connected Technology Solutions</p>
+            </footer>
+    </div>
+
+    <div class="container-fluid">
+        <div class="navbar navbar-fixed-bottom">
+            <strong><marquee behavior="alternate" scrollamount="10" height="50">{{ inspiration }}</marquee></strong>
+        </div>
+    </div>
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<img src="{% static 'app/images/error.gif' %}" />
+
+<audio src="{% static 'app/audio/error.mp3' %}" autoplay="autoplay" loop="loop" />
+
+{% endblock %}

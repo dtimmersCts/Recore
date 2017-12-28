@@ -1,0 +1,87 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<script type="text/javascript">
+    var compDict = {};
+    var allComp = [];
+</script>
+
+{% if prodList %}
+    {% for prod in prodList %}
+        {% for comp in compList %}
+            {% if comp.prod_rlse_group == prod %}
+                <script type="text/javascript">
+                    compDict['{{ comp.id }}'] = [];
+                    allComp.push('{{ comp.id }}');   
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    <form action="/createProdRlse" method="post">
+        {% csrf_token %}
+        <div class="container-fluid" style="background-color:#eeeeee; padding:10px">
+            <h4 style="font-weight:bold">Select the appropriate equipment:</h4>
+                {% for prod in prodList %}
+                    <h5 style="font-weight:bold">{{ prod.name }}</h5>
+                        {% for comp in compList %}
+                        {% if comp.prod_rlse_group == prod %}
+                            <div style="padding-left:40px">
+                            <h5 style="font-weight:bold">{{ comp.name }}</h5>
+                                {% if forloop.parentloop.counter == 1 and forloop.counter == 1 %}
+                                    {% if comp.display_type == "dropdown" %}
+                                    <select name="{{ comp.id }}" required class="form-control" onchange="addEquipList(this.value, '#{{ comp.id }}', '#{{ comp.nextComp }}', '{{ kioskType }}')">
+                                        <option selected disabled hidden value="">Choose one</option>
+                                        <option value="None">None</option>
+                                        {% for equip in equipList %}
+                                            <option value={{ equip.id }}>{{ equip.make_model }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div id='{{ comp.id }}A'></div>
+                                    {% elif comp.display_type == "checkbox" %}
+                                        <script type="text/javascript">getNextComp('#{{ comp.nextComp }}', '{{ kioskType }}')</script>
+                                        <div class="form-group">
+                                            {% for equip in equipList %}
+                                                <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="{{ comp.id }}[]" value={{ equip.id }} onchange="addEquipListCheckbox(this, '#{{ comp.id }}', '#{{ comp.nextComp }}', '#{{ equip.id }}', '{{ kioskType }}')"/>{{ equip.make_model }}
+                                                </label>
+                                                </div>
+                                                <div id='{{ equip.id }}D'></div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div id='{{ comp.id }}'></div>
+                                
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        {% endfor %}
+                {% endfor %}
+            <br />
+            <input type="hidden" name="jobNumber" value={{ jobNumber }} />
+            <input type="hidden" name="kioskType" value='{{ kioskType }}' />
+            <input type="submit" class="btn btn-primary" />
+        </div>
+        <hr />
+    </form>
+{% endif %}
+
+<form action="/newProdRlse" method="post">
+    {% csrf_token %}
+    {{ prodRlseForm|crispy }}
+    <input type="hidden" name="jobNumber" value={{ jobNumber }} />
+    {% if not prodList %}
+        <input type="submit" class="btn btn-primary" />
+        <a class="btn btn-primary" href="{% url 'productionRelease' %}">Cancel</a>
+    {% endif %}
+</form>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+﻿{% load staticfiles %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+<div id="addNewProd_JS" style="padding-left:40px">
+    <h4 style="font-weight:bold">New Production Release Group Form</h4>
+    <form onsubmit="return false" method="get">
+        <div class="form-group">
+            <label for="name_id">Name<span class="asteriskField">*</span></label>
+            <input type="text" id="name_id" name="name" autofocus="autofocus" maxlength="80" class="form-control" placeholder="Equipment Configuration" required />
+        </div>
+        <div class="form-group">
+            <label for="prod_descript_id">Description<span class="asteriskField">*</span></label>
+            <textarea rows="5" id="prod_descript_id" name="prod_descript" maxlength="300" class="form-control" placeholder="Production Release Group Details" />
+        </div>
+        <p>
+            <input type="submit" value="Create" class="btn btn-primary" onclick="getProdValues();" />
+            <input type="button" name="Cancel" value="Cancel" class="btn btn-primary" onclick="cancelDatabaseForm_jscript();" />
+        </p>
+    </form>
+</div>

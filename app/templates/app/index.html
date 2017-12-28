@@ -1,0 +1,26 @@
+﻿{% extends "app/layout.html" %}
+{% load staticfiles %}
+{% block content %}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
+<div id={{ chartID|safe }} style="width: 700px;height: 500px"></div>
+
+<script type="text/javascript">
+    var chart_id = {{ chartID|safe }}
+    var chart = {{ chart|safe }}
+    var title = {{ chartTitle|safe }}
+    var series = {{ series|safe }}
+
+    jQuery(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: chart,
+            title: title,
+            series: series,
+            credits: {enabled:false},
+        });
+    });
+</script>
+    
+{% endblock %}

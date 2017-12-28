@@ -1,0 +1,36 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<div class="container-fluid" style="background-color:#eeeeee; padding:10px">
+    <h5><strong>Client Contact Form:</strong></h5>
+    <form action="/newClient_addContact" method="post">
+        {% csrf_token %}
+            <p>{{ contactForm|crispy }}</p>
+        <input type="hidden" value="{{ currentClient }}" name="clientName" />
+        <input type="submit" value="Add Contact" class="btn btn-primary" />
+    </form>
+</div>
+
+<br />
+
+{% if successMessage %}
+    <p style="color:green">{{ successMessage }}</p>
+{% elif errorMessage %}
+    <p style="color:red">{{ errorMessage }}</p>
+{% endif %}
+
+{% if contactTable %}
+    <h5><strong>Current Contacts:</strong></h5>
+    <p>{%  render_table contactTable %}</p>
+{% endif %}
+
+<a class="btn btn-primary" href="{% url 'newKiosk' %}">Add Kiosks</a>
+<a class="btn btn-primary" href="{% url 'newClient' %}">Add New Client</a>
+
+{% endblock %}

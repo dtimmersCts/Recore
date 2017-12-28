@@ -1,0 +1,94 @@
+﻿{% load staticfiles %}
+{% load render_table from django_tables2 %}
+
+<div id='editProdRlseEquip_JS'>
+
+<script type="text/javascript">
+    var compDict = {};
+    var allComp = [];
+</script>
+
+{% for prod in fullProdList %}
+    {% for comp in fullCompList %}
+        {% if comp.prod_rlse_group == prod %}
+            <script type="text/javascript">
+                compDict['{{ comp.id }}'] = [];
+                allComp.push('{{ comp.id }}');   
+            </script>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% for equip in equipList %}
+    <script type="text/javascript">
+        compDict['{{ equip.kiosk_component_id }}'].push('{{ equip.id }}');
+    </script>
+{% endfor %}
+
+<form action="/existProdRlse" method="post">
+    {% csrf_token %}
+    <div class="container-fluid" style="background-color:#eeeeee; padding:10px">
+        <h4 style="font-weight:bold">Select the appropriate equipment:</h4>
+            {% for prod in fullProdList %}
+                <h5 style="font-weight:bold">{{ prod.name }}</h5>
+                    {% for comp in fullCompList %}
+                    {% if comp.prod_rlse_group == prod %}
+                        <div style="padding-left:40px">
+                        <h5 style="font-weight:bold">{{ comp.name }}</h5>
+                                {% if comp.display_type == "dropdown" %}
+                                <div id='{{ comp.id }}'>
+                                <select id='{{ comp.id }}E_id' name="{{ comp.id }}" required class="form-control" onchange="editExistEquipList(this.value, '#{{ comp.id }}', '#{{ comp.nextComp }}', '{{ kioskType }}')">
+                                    <option selected value="None">None</option>
+                                    {% for equip in fullEquipList %}
+                                        {% if equip.kiosk_component == comp %}
+                                            {% if equip in equipList %}
+                                                <option selected value={{ equip.id }}>{{ equip.make_model }}</option>
+                                            {% else %}
+                                                <option value={{ equip.id }}>{{ equip.make_model }}</option>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                </div>
+                                <div id='{{ comp.id }}A'>
+                                    <script type="text/javascript">editExistSubequip('{{ comp.id }}E_id', '#{{ comp.id }}A', '{{ jobNumber }}')</script>
+                                </div>
+                                {% elif comp.display_type == "checkbox" %}
+                                <div id='{{ comp.id }}'>
+                                    <div class="form-group">
+                                        {% for equip in fullEquipList %}
+                                            {% if equip.kiosk_component == comp %}
+                                                {% if equip in equipList %}
+                                                    <div class="checkbox">
+                                                    <label>
+                                                        <input id='{{ equip.id }}D_id' type="checkbox" name="{{ comp.id }}[]" value={{ equip.id }} checked onchange="editExistEquipCheckbox(this, '#{{ comp.id }}', '#{{ comp.nextComp }}', '#{{ equip.id }}', '{{ kioskType }}')"/>{{ equip.make_model }}
+                                                    </label>
+                                                    </div>
+                                                    <div id='{{ equip.id }}F'>
+                                                        <script type="text/javascript">editExistSubequip('{{ equip.id }}D_id', '#{{ equip.id }}F', '{{ jobNumber }}')</script>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="checkbox">
+                                                    <label>
+                                                        <input id='{{ equip.id }}D_id' type="checkbox" name="{{ comp.id }}[]" value={{ equip.id }} onchange="editExistEquipCheckbox(this, '#{{ comp.id }}', '#{{ comp.nextComp }}', '#{{ equip.id }}', '{{ kioskType }}')"/>{{ equip.make_model }}
+                                                    </label>
+                                                    </div>
+                                                    <div id='{{ equip.id }}F'></div>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                        </div>
+                    {% endif %}
+                    {% endfor %}
+            {% endfor %}
+        <br />
+        <input type="hidden" name="jobNumber" value={{ jobNumber }} />
+        <input type="hidden" name="kioskType" value='{{ kioskType }}' />
+        <input type="submit" class="btn btn-primary" />
+        <a class="btn btn-primary" href="{% url 'existProdRlse' %}?jobNumber={{ jobNumber }}">Cancel</a>
+    </div>
+</form>
+</div>

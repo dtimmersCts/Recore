@@ -1,0 +1,14 @@
+﻿{% extends "app/layout.html" %}
+{% load static %}
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h4>{{ message }}</h4>
+
+<input type="button" name="CTS Kiosk ID" value="CTS Kiosk ID" class="btn btn-primary" onclick="getSearchForm(this.value);" />
+<input type="button" name="Job Number" value="Job Number" class="btn btn-primary" onclick="getSearchForm(this.value);" />
+<input type="button" name="Peripheral" value="Peripheral" class="btn btn-primary" onclick="getSearchForm(this.value);" />
+
+<div id="getSearchForm_JS"></div>
+
+{% endblock %}
