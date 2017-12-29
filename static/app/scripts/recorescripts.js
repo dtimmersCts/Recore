@@ -395,18 +395,14 @@ function createNewProd_jscript(name, prod_descript) {
 
 function getNewRelations_jscript(currentKioskType) {
     var newEquipRelation = []
-    var subassemblyRelation = []
     $("input[name='equipRelationList[]']:checked").each(function () {
-        var currentEquip = parseInt($(this).val());
-        newEquipRelation.push(currentEquip);
-        var subassemblyDiv = currentEquip.toString().concat('S');
-        subassemblyRelation.push(document.getElementById(subassemblyDiv).value)
+        newEquipRelation.push(parseInt($(this).val()));
     });
 
     $.ajax({
         type: "GET",
         url: 'newEquipRelations',
-        data: { 'equipRelations': newEquipRelation, 'subassemblyRelation': subassemblyRelation, 'currentKioskType': currentKioskType }
+        data: { 'equipRelations': newEquipRelation, 'currentKioskType': currentKioskType }
     })
         .done(function (response) {
             $('#newEquipRelations_JS').replaceWith(response);

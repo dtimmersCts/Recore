@@ -248,7 +248,7 @@ def clientList(request):
             'inspiration':inspirationalQuote(),
             'year': datetime.now().year,
             'message':'Select a Client to view a list of their kiosks',
-            'clients': Client.objects.all(),
+            'clients': Client.objects.all().order_by('name'),
         }
     )
 
@@ -2393,6 +2393,7 @@ def newEquipRelations(request):
 
     # get the full equipment list from the GET request; get the kiosk type from the GET request
     newEquipList = request.GET.getlist('equipRelations[]')
+    subassemblyList = request.GET.getlist('subassemblyRelation[]')
     currentKioskType = KioskType.objects.filter(kiosk_type=request.GET.get('currentKioskType')).first()
 
     # query the database for the kiosk equipment, kiosk components, and production release groups based on the submitted kiosk equipment
@@ -2402,7 +2403,12 @@ def newEquipRelations(request):
     
     # loop through the submitted equipment; create equipment to kiosk type relations in the database
     for i in range(len(currentEquip)):
-        KioskTypeEquip.objects.create(kiosk_type=currentKioskType, equip=currentEquip[i], eff_date=datetime.now())
+
+        # check that a subassembly number was entered; if there is no subassembly number then set the attribute to None
+        if subassemblyList[i] == '':
+            KioskTypeEquip.objects.create(kiosk_type=currentKioskType, equip=currentEquip[i], subassembly_num=None, eff_date=datetime.now())
+        else:
+            KioskTypeEquip.objects.create(kiosk_type=currentKioskType, equip=currentEquip[i], subassembly_num=subassemblyList[i], eff_date=datetime.now())
 
     # loop through the submitted kiosk components; create kiosk component to kiosk type relations in the database
     for i in range(len(currentComp)):

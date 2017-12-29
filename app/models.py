@@ -215,7 +215,7 @@ class KioskTypeComponent(models.Model):
 class KioskTypeEquip(models.Model):
     kiosk_type = models.ForeignKey(KioskType, db_column='Kiosk_Type_id', verbose_name='Kiosk Model') # Field name made lowercase.
     equip = models.ForeignKey(Equip, db_column='Equip_id', verbose_name='Equipment') # Field name made lowercase.
-    subassembly_num = models.CharField(max_length=30, blank=True, null=True, verbose_name='Subassembly Number')
+    subassembly_num = models.CharField(max_length=100, blank=True, null=True, verbose_name='Subassembly Number')
     eff_date = models.DateField(null=True, verbose_name='Effective Date')
     exp_date = models.DateField(null=True, verbose_name='Expiration Date')
 

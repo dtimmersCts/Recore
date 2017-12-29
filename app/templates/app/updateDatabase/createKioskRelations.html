@@ -17,6 +17,10 @@
                                 <div style="padding-left:120px" class="form-group">
                                     <label><input type="checkbox" class="checkbox-inline" name=equipRelationList[] value={{ equip.id }} />{{ equip.make_model }}</label>
                                 </div>
+                                <div style="padding-left:140px" class="form-group">
+                                    <label for="{{ equip.id }}S">Subassembly Number</label>
+                                    <input type="text" id="{{ equip.id }}S" name="{{ equip.id }}S" maxlength="100" class="form-control" placeholder="Subassembly Number" />
+                                </div>
                             {% endif %}
                             {% endfor %}
                             <div style="padding-left:120px"><input type="button" name="newEquip" value="Add Equipment" class="btn btn-primary" onclick="addNewEquip_jscript('{{ prod.id }}', '{{ comp.id }}', '#{{ comp.id }}C')" /></div>
